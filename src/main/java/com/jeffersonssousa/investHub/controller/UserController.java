@@ -1,6 +1,7 @@
 package com.jeffersonssousa.investHub.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,12 @@ public class UserController {
 	public ResponseEntity<User> getUserById(@PathVariable Long userId){
 		User user = userService.getUserById(userId);
 		return ResponseEntity.ok().body(user);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<User>> getUsers(){
+		List<User> list = userService.getUsers();
+		return ResponseEntity.ok().body(list);
 	}
 	
 }

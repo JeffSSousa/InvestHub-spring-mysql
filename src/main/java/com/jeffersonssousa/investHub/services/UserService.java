@@ -1,6 +1,7 @@
 package com.jeffersonssousa.investHub.services;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,10 @@ public class UserService {
 	public User getUserById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
 		return obj.get();
+	}
+	
+	public List<User> getUsers(){
+		return userRepository.findAll();
 	}
 
 	
