@@ -32,9 +32,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/{userId}")
-	public ResponseEntity<User> getUserById(@PathVariable("userId") String userId){
-		//
-		return null;
+	public ResponseEntity<User> getUserById(@PathVariable Long userId){
+		User user = userService.getUserById(userId);
+		return ResponseEntity.ok().body(user);
 	}
-
+	
 }
