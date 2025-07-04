@@ -29,6 +29,10 @@ public class UserService {
 	public List<User> getUsers(){
 		return userRepository.findAll();
 	}
+	
+	public void deleteById(Long id) {
+		userRepository.deleteById(id);
+	}
 
 	
 	public User fromDTO (UserDTO userDTO) {
