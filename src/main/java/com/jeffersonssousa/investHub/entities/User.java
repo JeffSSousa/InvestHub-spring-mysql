@@ -1,7 +1,6 @@
 package com.jeffersonssousa.investHub.entities;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +13,8 @@ import jakarta.persistence.Table;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID userId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long userId;
 
 	private String username;
 	private String email;
@@ -27,7 +26,7 @@ public class User {
 	public User() {
 	}
 
-	public User(UUID userId, String username, String email, String password, Instant criationTimestamp,
+	public User(Long userId, String username, String email, String password, Instant criationTimestamp,
 			Instant updateTimestamp) {
 		this.userId = userId;
 		this.username = username;
@@ -37,11 +36,11 @@ public class User {
 		this.updateTimestamp = updateTimestamp;
 	}
 
-	public UUID getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(UUID userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
