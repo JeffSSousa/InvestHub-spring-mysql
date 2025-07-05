@@ -33,9 +33,24 @@ public class UserService {
 	public void deleteById(Long id) {
 		userRepository.deleteById(id);
 	}
-
+	
+	public User updateUserById(Long id, User user) {
+		User entity = userRepository.getReferenceById(id);
+		updateUser(entity, user);
+		return userRepository.save(entity);
+	}
 	
 	public User fromDTO (UserDTO userDTO) {
 		return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), Instant.now(), null);
+	}
+	
+	private void updateUser(User entity, User user) {
+		if(user.getUsername() != null) {
+		entity.setUsername(user.getUsername());
+		}
+		if(user.getPassword() != null) {
+		entity.setPassword(user.getPassword());
+		}
+		entity.setUpdateTimestamp(Instant.now());
 	}
 }

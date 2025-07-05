@@ -3,11 +3,11 @@ package com.jeffersonssousa.investHub.dto;
 import com.jeffersonssousa.investHub.entities.User;
 
 public class UserDTO {
-	
+
 	private String username;
 	private String email;
 	private String password;
-	
+
 	public UserDTO() {
 	}
 
@@ -40,9 +40,5 @@ public class UserDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
-	
 
 }
