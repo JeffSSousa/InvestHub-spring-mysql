@@ -57,5 +57,4 @@ public class UserController {
 		user = userService.updateUserById(id, user);
 		return ResponseEntity.noContent().build();
 	}
-	
 }
