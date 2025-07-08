@@ -3,6 +3,9 @@ package com.jeffersonssousa.investHub.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -10,7 +13,13 @@ import jakarta.persistence.Table;
 public class BillingAddress {
 
 	@Id
+	@Column(name = "account_id")
 	private Long id;
+	
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "account_id")
+	private Account account ;
 
 	@Column(name = "street")
 	private String street;
