@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.time.Instant;
 import java.util.List;
@@ -129,17 +132,58 @@ public class UserServiceTest {
 			// arrange
 			User user = new User(null, "Username", "test@email.com", "password", Instant.now(), null);
 			List<User> userList = List.of(user);
-			
+
 			doReturn(userList).when(userRepository).findAll();
-			
+
 			// act
 			List<User> output = userService.getUsers();
-			
+
 			// assert
 			assertNotNull(output);
 			assertEquals(userList.size(), output.size());
-			
+
 		}
+	}
+
+	@Nested
+	class deleteById {
+
+		@Test
+		@DisplayName("Should delete user with success when user exists")
+		void shouldDeleteUserWithSuccessWhenUserExists() {
+
+			// Arrange
+			Long id = 1L;
+
+			doReturn(true).when(userRepository).existsById(id);
+		    doNothing().when(userRepository).deleteById(id);
+		    
+		    
+			// act
+			userService.deleteById(id);;
+
+			// assert
+			verify(userRepository).existsById(id);
+			verify(userRepository).deleteById(id);
+		}
+		
+		@Test
+		@DisplayName("Should not delete user with success when user not exists")
+		void shouldNotDeleteUserWithSuccessWhenUserNotExists() {
+
+			// Arrange
+			Long id = 1L;
+
+			doReturn(false).when(userRepository).existsById(id);
+
+		    // Act & Assert
+		    assertThrows(ControllerNotFoundException.class, () -> userService.deleteById(id));
+
+		    verify(userRepository).existsById(id);
+		    verify(userRepository, never()).deleteById(id);
+
+		}
+
 	}
 
 }
