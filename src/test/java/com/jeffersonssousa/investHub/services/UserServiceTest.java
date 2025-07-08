@@ -24,7 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.jeffersonssousa.investHub.dto.UserDTO;
+import com.jeffersonssousa.investHub.controller.dto.UserDTO;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;

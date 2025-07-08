@@ -1,4 +1,4 @@
-package com.jeffersonssousa.investHub.dto;
+package com.jeffersonssousa.investHub.controller.dto;
 
 public class UserDTO {
 

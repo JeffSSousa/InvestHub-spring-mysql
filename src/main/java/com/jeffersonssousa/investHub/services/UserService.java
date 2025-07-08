@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jeffersonssousa.investHub.dto.UserDTO;
+import com.jeffersonssousa.investHub.controller.dto.UserDTO;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;
