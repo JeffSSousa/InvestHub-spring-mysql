@@ -52,11 +52,11 @@ public class UserServiceTest {
 
 			// Arrange
 			UserDTO userDTO = new UserDTO("Username", "test@email.com", "password");
-			User user = userService.fromDTO(userDTO);
+			User user = userService.fromUserDTO(userDTO);
 
 			doReturn(user).when(userRepository).save(userArgumentCaptor.capture());
 			UserDTO inputDTO = new UserDTO("Username", "test@email.com", "123");
-			User input = userService.fromDTO(inputDTO);
+			User input = userService.fromUserDTO(inputDTO);
 
 			// Act
 			User output = userService.createUser(input);
@@ -199,7 +199,7 @@ public class UserServiceTest {
 			Long id = 1L;
 			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null);
 			UserDTO userDTO = new UserDTO("newUsername", "newemail@email.com", "newPassword");
-			User newUser = userService.fromDTO(userDTO);
+			User newUser = userService.fromUserDTO(userDTO);
 
 			doReturn(user).when(userRepository).save(userArgumentCaptor.capture());
 			doReturn(user).when(userRepository).getReferenceById(id);
@@ -223,7 +223,7 @@ public class UserServiceTest {
 			// Arrange
 			Long id = 1L;
 			UserDTO userDTO = new UserDTO("newUsername", "newemail@email.com", "newPassword");
-			User newUser = userService.fromDTO(userDTO);
+			User newUser = userService.fromUserDTO(userDTO);
 
 			doThrow(new EntityNotFoundException()).when(userRepository).getReferenceById(id);
 

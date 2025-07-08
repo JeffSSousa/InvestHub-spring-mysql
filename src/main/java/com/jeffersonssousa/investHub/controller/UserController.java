@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
 import com.jeffersonssousa.investHub.controller.dto.UserDTO;
+import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.services.UserService;
 
@@ -28,7 +30,7 @@ public class UserController {
 	
 	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody  UserDTO userDTO){
-		User user = userService.fromDTO(userDTO);
+		User user = userService.fromUserDTO(userDTO);
 		user = userService.createUser(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getUserId()).toUri();
 		return ResponseEntity.created(uri).body(user);
@@ -56,5 +58,13 @@ public class UserController {
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user){
 		user = userService.updateUserById(id, user);
 		return ResponseEntity.noContent().build();
+	}
+	
+	
+	@PostMapping("/{userId}/accounts")
+	public ResponseEntity<Void> createAccount(@PathVariable Long userId, @RequestBody  AccountDTO accountDTO){
+		Account account = userService.createAccount(userId, accountDTO);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{accountId}").buildAndExpand(account.getAccountId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 }

@@ -1,14 +1,20 @@
 package com.jeffersonssousa.investHub.services;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
 import com.jeffersonssousa.investHub.controller.dto.UserDTO;
+import com.jeffersonssousa.investHub.entities.Account;
+import com.jeffersonssousa.investHub.entities.BillingAddress;
 import com.jeffersonssousa.investHub.entities.User;
+import com.jeffersonssousa.investHub.repository.AccountRepository;
+import com.jeffersonssousa.investHub.repository.BillingAddressRepository;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;
 
@@ -19,6 +25,12 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
+	
+	@Autowired
+	private BillingAddressRepository billingAddressRepository;
 
 	public User createUser(User user) {
 		return userRepository.save(user);
@@ -50,8 +62,27 @@ public class UserService {
 		}
 
 	}
+	
+	public Account createAccount(Long userId, AccountDTO accountDTO) {
+		if(!userRepository.existsById(userId)) {
+			throw new ControllerNotFoundException(userId);
+		}
+		
+		Optional<User> user = userRepository.findById(userId);
+		
+		Account account = new Account(null, accountDTO.getDescription(), user.get(), null, new ArrayList<>());
+		BillingAddress billingAddress = new BillingAddress(null, account , accountDTO.getStreet(), accountDTO.getNumber());
+		account.setBillingAddress(billingAddress);
+		
+		Account newAccount = accountRepository.save(account);
+		billingAddressRepository.save(billingAddress);
 
-	public User fromDTO(UserDTO userDTO) {
+		
+		return newAccount;
+	}
+
+	
+	public User fromUserDTO(UserDTO userDTO) {
 		return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), Instant.now(), null);
 	}
 
@@ -64,4 +95,6 @@ public class UserService {
 		}
 		entity.setUpdateTimestamp(Instant.now());
 	}
+
+	
 }

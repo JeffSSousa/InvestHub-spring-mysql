@@ -2,6 +2,7 @@ package com.jeffersonssousa.investHub.entities;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,20 +30,25 @@ public class Account {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
-	@OneToOne(mappedBy = "account")
+
+	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private BillingAddress billingAddress;
-	
+
 	@OneToMany(mappedBy = "account")
 	private List<AccountStock> accountStocks;
 
 	public Account() {
 	}
 
-	public Account(Long accountId, String description) {
+	public Account(Long accountId, String description, User user, BillingAddress billingAddress,
+			List<AccountStock> accountStocks) {
+		super();
 		this.accountId = accountId;
 		this.description = description;
+		this.user = user;
+		this.billingAddress = billingAddress;
+		this.accountStocks = accountStocks;
 	}
 
 	public Long getAccountId() {
@@ -68,4 +74,13 @@ public class Account {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public BillingAddress getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(BillingAddress billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.jeffersonssousa.investHub.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,11 +16,11 @@ public class BillingAddress {
 	@Id
 	@Column(name = "account_id")
 	private Long id;
-	
-	@OneToOne
+
+	@OneToOne(cascade = CascadeType.ALL)
 	@MapsId
 	@JoinColumn(name = "account_id")
-	private Account account ;
+	private Account account;
 
 	@Column(name = "street")
 	private String street;
@@ -30,8 +31,9 @@ public class BillingAddress {
 	public BillingAddress() {
 	}
 
-	public BillingAddress(Long id, String street, Integer number) {
+	public BillingAddress(Long id, Account account, String street, Integer number) {
 		this.id = id;
+		this.account = account;
 		this.street = street;
 		this.number = number;
 	}
@@ -60,4 +62,13 @@ public class BillingAddress {
 		this.number = number;
 	}
 
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	
 }
