@@ -29,6 +29,8 @@ import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
@@ -156,17 +158,17 @@ public class UserServiceTest {
 			Long id = 1L;
 
 			doReturn(true).when(userRepository).existsById(id);
-		    doNothing().when(userRepository).deleteById(id);
-		    
-		    
+			doNothing().when(userRepository).deleteById(id);
+
 			// act
-			userService.deleteById(id);;
+			userService.deleteById(id);
+			;
 
 			// assert
 			verify(userRepository).existsById(id);
 			verify(userRepository).deleteById(id);
 		}
-		
+
 		@Test
 		@DisplayName("Should not delete user with success when user not exists")
 		void shouldNotDeleteUserWithSuccessWhenUserNotExists() {
@@ -176,14 +178,62 @@ public class UserServiceTest {
 
 			doReturn(false).when(userRepository).existsById(id);
 
-		    // Act & Assert
-		    assertThrows(ControllerNotFoundException.class, () -> userService.deleteById(id));
+			// Act & Assert
+			assertThrows(ControllerNotFoundException.class, () -> userService.deleteById(id));
 
-		    verify(userRepository).existsById(id);
-		    verify(userRepository, never()).deleteById(id);
+			verify(userRepository).existsById(id);
+			verify(userRepository, never()).deleteById(id);
 
 		}
 
+	}
+
+	@Nested
+	class updateUserById {
+
+		@Test
+		@DisplayName("Should update user by id when user exists and username and password is filled")
+		void shouldUpdateUserByIdWhenUserExistsAndUsernameAndPasswordIsFilled() {
+
+			// Arrange
+			Long id = 1L;
+			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null);
+			UserDTO userDTO = new UserDTO("newUsername", "newemail@email.com", "newPassword");
+			User newUser = userService.fromDTO(userDTO);
+
+			doReturn(user).when(userRepository).save(userArgumentCaptor.capture());
+			doReturn(user).when(userRepository).getReferenceById(id);
+
+			// act
+			User output = userService.updateUserById(id, newUser);
+
+			// assert
+			User userCaptured = userArgumentCaptor.getValue();
+			assertEquals(user.getUserId(), output.getUserId());
+			assertEquals(output.getUsername(), userCaptured.getUsername());
+			assertEquals(output.getPassword(), userCaptured.getPassword());
+			assertNotNull(output.getUpdateTimestamp());
+
+		}
+
+		@Test
+		@DisplayName("Should not update user when user not exists")
+		void shouldNotUpdateUserWhenUserNotExists() {
+
+			// Arrange
+			Long id = 1L;
+			UserDTO userDTO = new UserDTO("newUsername", "newemail@email.com", "newPassword");
+			User newUser = userService.fromDTO(userDTO);
+
+			doThrow(new EntityNotFoundException()).when(userRepository).getReferenceById(id);
+
+			// Act & Assert
+			assertThrows(ControllerNotFoundException.class, () -> userService.updateUserById(id, newUser));
+
+			verify(userRepository).getReferenceById(id);
+			verify(userRepository, never()).save(any());
+
+		}
 	}
 
 }
