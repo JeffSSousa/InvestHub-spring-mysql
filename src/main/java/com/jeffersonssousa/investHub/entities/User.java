@@ -1,11 +1,13 @@
 package com.jeffersonssousa.investHub.entities;
 
 import java.time.Instant;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +24,9 @@ public class User {
 
 	private Instant criationTimestamp;
 	private Instant updateTimestamp;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Account> accounts;
 
 	public User() {
 	}
@@ -84,4 +89,14 @@ public class User {
 		this.updateTimestamp = updateTimestamp;
 	}
 
+	public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	
+	
 }
