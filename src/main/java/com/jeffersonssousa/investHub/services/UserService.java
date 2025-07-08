@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
+import com.jeffersonssousa.investHub.controller.dto.AccountResponseDTO;
 import com.jeffersonssousa.investHub.controller.dto.UserDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.BillingAddress;
@@ -81,6 +82,16 @@ public class UserService {
 		return newAccount;
 	}
 
+	public List<AccountResponseDTO> listAccounts(Long userId) {
+		Optional<User> user = userRepository.findById(userId);
+		user.orElseThrow(() -> new ControllerNotFoundException(userId));
+		
+		return user.get()
+		    .getAccounts()
+		    .stream()
+		    .map(ac -> new AccountResponseDTO(ac.getAccountId(), ac.getDescription()))
+		    .toList();
+	}
 	
 	public User fromUserDTO(UserDTO userDTO) {
 		return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), Instant.now(), null);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
+import com.jeffersonssousa.investHub.controller.dto.AccountResponseDTO;
 import com.jeffersonssousa.investHub.controller.dto.UserDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.User;
@@ -66,5 +67,13 @@ public class UserController {
 		Account account = userService.createAccount(userId, accountDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{accountId}").buildAndExpand(account.getAccountId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@GetMapping("/{userId}/accounts")
+	public ResponseEntity<List<AccountResponseDTO>> listAccounts(@PathVariable Long userId){
+		
+		List<AccountResponseDTO> list = userService.listAccounts(userId);
+		
+		return ResponseEntity.ok().body(list);
 	}
 }
