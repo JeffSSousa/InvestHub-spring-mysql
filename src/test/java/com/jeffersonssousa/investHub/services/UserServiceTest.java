@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ public class UserServiceTest {
 
 	@Captor
 	private ArgumentCaptor<User> userArgumentCaptor;
-	
+
 	@InjectMocks
 	private UserService userService;
 
@@ -51,7 +52,7 @@ public class UserServiceTest {
 			doReturn(user).when(userRepository).save(userArgumentCaptor.capture());
 			UserDTO inputDTO = new UserDTO("Username", "test@email.com", "123");
 			User input = userService.fromDTO(inputDTO);
-			
+
 			// Act
 			User output = userService.createUser(input);
 
@@ -79,42 +80,64 @@ public class UserServiceTest {
 
 		}
 	}
-	
-	
+
 	@Nested
-	class getUserById{
-		
+	class getUserById {
+
 		@Test
 		@DisplayName("Should get user by id with success when optional is present")
 		void shouldGetUserByIdWithSuccessWhenOptionaIsPresent() {
-			
-			//Arrange
+
+			// Arrange
 			Long id = 1L;
 			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null);
-			
+
 			doReturn(Optional.of(user)).when(userRepository).findById(id);
-			
-			//act
+
+			// act
 			User output = userService.getUserById(id);
-			
-			//assert
+
+			// assert
 			assertNotNull(output);
 			assertEquals(user.getUserId(), output.getUserId());
 			assertEquals(user.getEmail(), output.getEmail());
 			assertEquals(user.getPassword(), output.getPassword());
 			assertEquals(user.getCriationTimestamp(), output.getCriationTimestamp());
 		}
-		
+
 		@Test
 		@DisplayName("Should throw exception when user not found by id")
 		void shouldThrowExceptionWhenUserNotFoundById() {
-			
-			//Arrange
+
+			// Arrange
 			Long id = 1L;
 			doReturn(Optional.empty()).when(userRepository).findById(id);
 
-			//act & assert
+			// act & assert
 			assertThrows(ControllerNotFoundException.class, () -> userService.getUserById(id));
+
+		}
+	}
+
+	@Nested
+	class getUsers {
+
+		@Test
+		@DisplayName("Should return all users success")
+		void shouldReturnAllUsersWithSuccess() {
+
+			// arrange
+			User user = new User(null, "Username", "test@email.com", "password", Instant.now(), null);
+			List<User> userList = List.of(user);
+			
+			doReturn(userList).when(userRepository).findAll();
+			
+			// act
+			List<User> output = userService.getUsers();
+			
+			// assert
+			assertNotNull(output);
+			assertEquals(userList.size(), output.size());
 			
 		}
 	}
