@@ -1,7 +1,5 @@
 package com.jeffersonssousa.investHub.dto;
 
-import com.jeffersonssousa.investHub.entities.User;
-
 public class UserDTO {
 
 	private String username;
@@ -11,10 +9,10 @@ public class UserDTO {
 	public UserDTO() {
 	}
 
-	public UserDTO(User user) {
-		this.username = user.getUsername();
-		this.email = user.getEmail();
-		this.password = user.getPassword();
+	public UserDTO(String username, String email, String password) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
 	}
 
 	public String getUsername() {
