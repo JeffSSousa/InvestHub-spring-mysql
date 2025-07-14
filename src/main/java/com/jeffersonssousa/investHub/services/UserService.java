@@ -37,13 +37,19 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public User getUserById(Long id) {
+	public UserDTO getUserById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
-		return obj.orElseThrow(() -> new ControllerNotFoundException(id));
+		User user = obj.orElseThrow(() -> new ControllerNotFoundException(id));
+		UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail(), user.getPassword());
+	
+		return userDTO;
 	}
 
-	public List<User> getUsers() {
-		return userRepository.findAll();
+	public List<UserDTO> getUsers() {
+		List<User> list = userRepository.findAll();
+		return list.stream()
+				   .map(user -> new UserDTO(user.getUsername(), user.getEmail(), user.getPassword()))
+				   .toList();
 	}
 
 	public void deleteById(Long id) {

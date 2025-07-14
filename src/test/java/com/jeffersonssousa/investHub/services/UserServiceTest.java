@@ -100,14 +100,12 @@ public class UserServiceTest {
 			doReturn(Optional.of(user)).when(userRepository).findById(id);
 
 			// act
-			User output = userService.getUserById(id);
+			UserDTO output = userService.getUserById(id);
 
 			// assert
 			assertNotNull(output);
-			assertEquals(user.getUserId(), output.getUserId());
 			assertEquals(user.getEmail(), output.getEmail());
 			assertEquals(user.getPassword(), output.getPassword());
-			assertEquals(user.getCriationTimestamp(), output.getCriationTimestamp());
 		}
 
 		@Test
@@ -138,7 +136,7 @@ public class UserServiceTest {
 			doReturn(userList).when(userRepository).findAll();
 
 			// act
-			List<User> output = userService.getUsers();
+			List<UserDTO> output = userService.getUsers();
 
 			// assert
 			assertNotNull(output);
