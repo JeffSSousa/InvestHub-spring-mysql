@@ -1,4 +1,4 @@
-package com.jeffersonssousa.investHub.client;
+package com.jeffersonssousa.investHub.client.dto;
 
 public class StockDTO {
 

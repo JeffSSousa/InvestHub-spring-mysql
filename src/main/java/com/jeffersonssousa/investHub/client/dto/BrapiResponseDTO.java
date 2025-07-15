@@ -2,8 +2,6 @@ package com.jeffersonssousa.investHub.client.dto;
 
 import java.util.List;
 
-import com.jeffersonssousa.investHub.client.StockDTO;
-
 
 public class BrapiResponseDTO {
 
