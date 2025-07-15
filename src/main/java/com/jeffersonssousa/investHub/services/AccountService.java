@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.jeffersonssousa.investHub.client.BrapiClient;
+import com.jeffersonssousa.investHub.client.dto.BrapiResponseDTO;
 import com.jeffersonssousa.investHub.controller.dto.AccountStockResponseDTO;
 import com.jeffersonssousa.investHub.controller.dto.AssociateAccountStockDTO;
 import com.jeffersonssousa.investHub.entities.Account;
@@ -20,6 +23,9 @@ import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundExcep
 @Service
 public class AccountService {
 
+	@Value("#{environment.TOKEN}")
+	private String TOKEN;
+	
 	@Autowired
 	private AccountRepository accountRepository;
 	
@@ -28,6 +34,9 @@ public class AccountService {
 	
 	@Autowired
 	private AccountStockRepository accountStockRepository;
+	
+	@Autowired
+	private BrapiClient brapiClient;
 	
 	public void associateStock(Long accountId, AssociateAccountStockDTO dto) {
 		
@@ -50,8 +59,21 @@ public class AccountService {
 		
 		return account.getAccountStocks()
 				      .stream()
-				      .map(as -> new AccountStockResponseDTO(as.getStock().getStockId(), as.getQuantity(), 0.0))
+				      .map(as -> 
+				              new AccountStockResponseDTO(as.getStock().getStockId(),
+				    		                              as.getQuantity(),
+				    		                              getTotal(as.getStock().getStockId(),
+				    		                            		   as.getQuantity())))
 				      .toList();
+	}
+
+	private Double getTotal(String stockId, Integer quantity) {
+		
+		BrapiResponseDTO response = brapiClient.getQuote(TOKEN, stockId);
+		
+		Double price = response.getResults().getFirst().getRegularMarketPrice();
+		
+		return quantity * price;
 	}
 	
 }
