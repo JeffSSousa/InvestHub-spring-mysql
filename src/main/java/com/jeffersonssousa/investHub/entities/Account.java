@@ -83,4 +83,14 @@ public class Account {
 		this.billingAddress = billingAddress;
 	}
 
+	public List<AccountStock> getAccountStocks() {
+		return accountStocks;
+	}
+
+	public void setAccountStocks(List<AccountStock> accountStocks) {
+		this.accountStocks = accountStocks;
+	}
+	
+	
+
 }

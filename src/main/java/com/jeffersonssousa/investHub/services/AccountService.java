@@ -1,10 +1,12 @@
 package com.jeffersonssousa.investHub.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jeffersonssousa.investHub.controller.dto.AccountStockResponseDTO;
 import com.jeffersonssousa.investHub.controller.dto.AssociateAccountStockDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.AccountStock;
@@ -39,6 +41,17 @@ public class AccountService {
 	    AccountStock entity = new AccountStock(id, account, stock, dto.getQuantity());
 	    
 	    accountStockRepository.save(entity);
+	}
+
+	public List<AccountStockResponseDTO> listStocks(Long accountId) {
+		
+		Optional<Account> accountObj = accountRepository.findById(accountId);
+	    Account account = accountObj.orElseThrow(() -> new ControllerNotFoundException(accountId));
+		
+		return account.getAccountStocks()
+				      .stream()
+				      .map(as -> new AccountStockResponseDTO(as.getStock().getStockId(), as.getQuantity(), 0.0))
+				      .toList();
 	}
 	
 }
