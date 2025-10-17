@@ -3,6 +3,8 @@ package com.jeffersonssousa.investHub.entities;
 import java.time.Instant;
 import java.util.List;
 
+import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,17 +38,12 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Account> accounts;
 	
-	public User(Long userId, String username, String email, String password, Instant criationTimestamp,
-			Instant updateTimestamp) {
-		this.userId = userId;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.criationTimestamp = criationTimestamp;
-		this.updateTimestamp = updateTimestamp;
+	public User(UserRequestDTO dto) {
+		this.username = dto.username();
+		this.email = dto.email();
+		this.password = dto.password();
+		this.criationTimestamp = Instant.now();
 	}
-
-
 	
 	
 	

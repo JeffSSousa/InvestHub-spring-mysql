@@ -17,7 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
 import com.jeffersonssousa.investHub.controller.dto.AccountResponseDTO;
-import com.jeffersonssousa.investHub.controller.dto.UserDTO;
+import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.services.UserService;
@@ -30,22 +30,22 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<User> createUser(@RequestBody  UserDTO userDTO){
-		User user = userService.fromUserDTO(userDTO);
+	public ResponseEntity<Void> createUser(@RequestBody  UserRequestDTO dto){
+		User user = new User(dto);
 		user = userService.createUser(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getUserId()).toUri();
-		return ResponseEntity.created(uri).body(user);
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@GetMapping("/{userId}")
-	public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId){
-		UserDTO userDTO = userService.getUserById(userId);
+	public ResponseEntity<UserRequestDTO> getUserById(@PathVariable Long userId){
+		UserRequestDTO userDTO = userService.getUserById(userId);
 		return ResponseEntity.ok().body(userDTO);
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<UserDTO>> getUsers(){
-		List<UserDTO> list = userService.getUsers();
+	public ResponseEntity<List<UserRequestDTO>> getUsers(){
+		List<UserRequestDTO> list = userService.getUsers();
 		return ResponseEntity.ok().body(list);
 	}
 	

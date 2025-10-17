@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
 import com.jeffersonssousa.investHub.controller.dto.AccountResponseDTO;
-import com.jeffersonssousa.investHub.controller.dto.UserDTO;
+import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.BillingAddress;
 import com.jeffersonssousa.investHub.entities.User;
@@ -37,19 +37,18 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public UserDTO getUserById(Long id) {
+	public UserRequestDTO getUserById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
 		User user = obj.orElseThrow(() -> new ControllerNotFoundException(id));
-		UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail(), user.getPassword());
+		UserRequestDTO userDTO = new UserRequestDTO(user.getUsername(), user.getEmail(), user.getPassword());
 	
 		return userDTO;
 	}
 
-	public List<UserDTO> getUsers() {
+	public List<UserRequestDTO> getUsers() {
 		List<User> list = userRepository.findAll();
-		return list.stream()
-				   .map(user -> new UserDTO(user.getUsername(), user.getEmail(), user.getPassword()))
-				   .toList();
+		
+		return list.stream().map(user -> new UserRequestDTO(user.getUsername(), user.getEmail(), user.getPassword())).toList();
 	}
 
 	public void deleteById(Long id) {
@@ -97,10 +96,6 @@ public class UserService {
 		    .stream()
 		    .map(ac -> new AccountResponseDTO(ac.getAccountId(), ac.getDescription()))
 		    .toList();
-	}
-	
-	public User fromUserDTO(UserDTO userDTO) {
-		return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), Instant.now(), null);
 	}
 
 	private void updateUser(User entity, User user) {
