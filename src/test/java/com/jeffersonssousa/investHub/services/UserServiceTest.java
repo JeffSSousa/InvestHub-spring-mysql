@@ -159,33 +159,33 @@ public class UserServiceTest {
 
 			// Arrange
 			Long id = 1L;
+			User user = new User(id, null, null, null, null, null, null);
 
-			doReturn(true).when(userRepository).existsById(id);
-			doNothing().when(userRepository).deleteById(id);
+			doReturn(Optional.of(user)).when(userRepository).findById(id);
+			doNothing().when(userRepository).delete(user);
 
 			// act
 			userService.deleteById(id);
-			;
 
 			// assert
-			verify(userRepository).existsById(id);
-			verify(userRepository).deleteById(id);
+			verify(userRepository).findById(id);
+			verify(userRepository).delete(any(User.class));
 		}
 
 		@Test
 		@DisplayName("Should not delete user with success when user not exists")
 		void shouldNotDeleteUserWithSuccessWhenUserNotExists() {
 
+
 			// Arrange
 			Long id = 1L;
+			doReturn(Optional.empty()).when(userRepository).findById(id);
 
-			doReturn(false).when(userRepository).existsById(id);
+			// act & assert
+			assertThrows(ControllerNotFoundException.class, () -> userService.getUserById(id));
 
-			// Act & Assert
-			assertThrows(ControllerNotFoundException.class, () -> userService.deleteById(id));
-
-			verify(userRepository).existsById(id);
-			verify(userRepository, never()).deleteById(id);
+			verify(userRepository, times(1)).findById(id);
+			verify(userRepository, never()).delete(any(User.class));
 
 		}
 

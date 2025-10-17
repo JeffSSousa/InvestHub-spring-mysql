@@ -46,10 +46,10 @@ public class UserService {
 	}
 
 	public void deleteById(Long id) {
-		if (!userRepository.existsById(id)) {
-			throw new ControllerNotFoundException(id);
-		}
-		userRepository.deleteById(id);
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException(id));;
+				
+		userRepository.delete(user);
 	}
 
 	public User updateUserById(Long id, User user) {
