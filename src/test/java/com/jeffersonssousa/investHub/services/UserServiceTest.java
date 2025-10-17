@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
+import com.jeffersonssousa.investHub.controller.dto.UserResponseDTO;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;
@@ -138,13 +139,14 @@ public class UserServiceTest {
 		void shouldReturnAllUsersWithSuccess() {
 
 			// arrange
-			User user = new User(null, "Username", "test@email.com", "password", Instant.now(), null);
-			List<User> userList = List.of(user);
+			User user = new User(1L, "Username", "test@email.com", "password", Instant.now(), null, null);
+			User user2 = new User(2L, "Username", "test@email.com", "password", Instant.now(), null, null);
+			List<User> userList = List.of(user,user2);
 
 			doReturn(userList).when(userRepository).findAll();
 
 			// act
-			List<UserRequestDTO> output = userService.getUsers();
+			List<User> output = userService.getUsers();
 
 			// assert
 			assertNotNull(output);
