@@ -2,6 +2,7 @@ package com.jeffersonssousa.investHub.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -88,7 +89,6 @@ public class UserServiceTest {
 		}
 	}
 
-	@Disabled
 	@Nested
 	class getUserById {
 
@@ -98,17 +98,21 @@ public class UserServiceTest {
 
 			// Arrange
 			Long id = 1L;
-			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null);
+			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null, null);
 
 			doReturn(Optional.of(user)).when(userRepository).findById(id);
 
 			// act
-			UserRequestDTO output = userService.getUserById(id);
+			User output = userService.getUserById(id);
 
 			// assert
-			assertNotNull(output);
+			verify(userRepository, times(1)).findById(id);
+			
+			assertEquals(user.getUsername(), output.getUsername());
 			assertEquals(user.getEmail(), output.getEmail());
 			assertEquals(user.getPassword(), output.getPassword());
+			assertNotNull(output.getCriationTimestamp());
+			assertNull(output.getUpdateTimestamp());
 		}
 
 		@Test
