@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
 import com.jeffersonssousa.investHub.controller.dto.AccountResponseDTO;
-import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.BillingAddress;
 import com.jeffersonssousa.investHub.entities.User;
@@ -44,10 +43,8 @@ public class UserService {
 		return user;
 	}
 
-	public List<UserRequestDTO> getUsers() {
-		List<User> list = userRepository.findAll();
-		
-		return list.stream().map(user -> new UserRequestDTO(user.getUsername(), user.getEmail(), user.getPassword())).toList();
+	public List<User> getUsers() {
+		return  userRepository.findAll();
 	}
 
 	public void deleteById(Long id) {

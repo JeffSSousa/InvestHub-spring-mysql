@@ -45,8 +45,8 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<UserRequestDTO>> getUsers(){
-		List<UserRequestDTO> list = userService.getUsers();
+	public ResponseEntity<List<UserResponseDTO>> getUsers(){
+		List<UserResponseDTO> list = userService.getUsers().stream().map(UserResponseDTO::new).toList();
 		return ResponseEntity.ok().body(list);
 	}
 	
