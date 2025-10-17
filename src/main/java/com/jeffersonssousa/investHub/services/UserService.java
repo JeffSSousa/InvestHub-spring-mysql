@@ -18,8 +18,6 @@ import com.jeffersonssousa.investHub.repository.BillingAddressRepository;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class UserService {
 
@@ -55,14 +53,12 @@ public class UserService {
 	}
 
 	public User updateUserById(Long id, User user) {
-		try {
-			User entity = userRepository.getReferenceById(id);
+			User entity = userRepository.findById(id)
+										.orElseThrow(() -> new ControllerNotFoundException(id));;
+										
 			updateUser(entity, user);
+			
 			return userRepository.save(entity);
-		} catch (EntityNotFoundException e) {
-			throw new ControllerNotFoundException(id);
-		}
-
 	}
 	
 	public Account createAccount(Long userId, AccountDTO accountDTO) {

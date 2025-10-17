@@ -16,7 +16,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,12 +27,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
-import com.jeffersonssousa.investHub.controller.dto.UserResponseDTO;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.repository.UserRepository;
 import com.jeffersonssousa.investHub.services.exceptions.ControllerNotFoundException;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -130,7 +126,6 @@ public class UserServiceTest {
 		}
 	}
 
-	@Disabled
 	@Nested
 	class getUsers {
 
@@ -196,7 +191,6 @@ public class UserServiceTest {
 
 	}
 
-	@Disabled
 	@Nested
 	class updateUserById {
 
@@ -206,22 +200,23 @@ public class UserServiceTest {
 
 			// Arrange
 			Long id = 1L;
-			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null);
-			UserRequestDTO userDTO = new UserRequestDTO("newUsername", "newemail@email.com", "newPassword");
-			User newUser = userService.fromUserDTO(userDTO);
+			User user = new User(id, "Username", "test@email.com", "password", Instant.now(), null,null);
+			UserRequestDTO dto = new UserRequestDTO("newUsername", "newemail@email.com", "newPassword");
+			User updateUser = new User(dto);
 
-			doReturn(user).when(userRepository).save(userArgumentCaptor.capture());
-			doReturn(user).when(userRepository).getReferenceById(id);
+			doReturn(Optional.of(user)).when(userRepository).findById(id);
 
 			// act
-			User output = userService.updateUserById(id, newUser);
+			userService.updateUserById(id, updateUser);
 
 			// assert
-			User userCaptured = userArgumentCaptor.getValue();
-			assertEquals(user.getUserId(), output.getUserId());
-			assertEquals(output.getUsername(), userCaptured.getUsername());
-			assertEquals(output.getPassword(), userCaptured.getPassword());
-			assertNotNull(output.getUpdateTimestamp());
+			verify(userRepository, times(1)).findById(id);
+			verify(userRepository, times(1)).save(userArgumentCaptor.capture());
+			
+			
+			assertEquals(updateUser.getUsername(), user.getUsername());
+			assertEquals(updateUser.getPassword(), user.getPassword());
+			assertNotNull(user.getUpdateTimestamp());
 
 		}
 
@@ -231,15 +226,15 @@ public class UserServiceTest {
 
 			// Arrange
 			Long id = 1L;
-			UserRequestDTO userDTO = new UserRequestDTO("newUsername", "newemail@email.com", "newPassword");
-			User newUser = userService.fromUserDTO(userDTO);
+			UserRequestDTO dto = new UserRequestDTO("newUsername", "newemail@email.com", "newPassword");
+			User user = new User(dto);
 
-			doThrow(new EntityNotFoundException()).when(userRepository).getReferenceById(id);
+			doThrow(new ControllerNotFoundException(id)).when(userRepository).findById(id);
 
 			// Act & Assert
-			assertThrows(ControllerNotFoundException.class, () -> userService.updateUserById(id, newUser));
+			assertThrows(ControllerNotFoundException.class, () -> userService.updateUserById(id, user));
 
-			verify(userRepository).getReferenceById(id);
+			verify(userRepository).findById(id);
 			verify(userRepository, never()).save(any());
 
 		}
