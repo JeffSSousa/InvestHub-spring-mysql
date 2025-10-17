@@ -8,9 +8,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_billingaddress")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class BillingAddress {
 
 	@Id
@@ -27,48 +35,6 @@ public class BillingAddress {
 
 	@Column(name = "number")
 	private Integer number;
-
-	public BillingAddress() {
-	}
-
-	public BillingAddress(Long id, Account account, String street, Integer number) {
-		this.id = id;
-		this.account = account;
-		this.street = street;
-		this.number = number;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
 
 	
 }

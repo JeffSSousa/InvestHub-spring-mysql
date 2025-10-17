@@ -9,9 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_users")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class User {
 
 	@Id
@@ -27,10 +35,7 @@ public class User {
 	
 	@OneToMany(mappedBy = "user")
 	private List<Account> accounts;
-
-	public User() {
-	}
-
+	
 	public User(Long userId, String username, String email, String password, Instant criationTimestamp,
 			Instant updateTimestamp) {
 		this.userId = userId;
@@ -41,62 +46,8 @@ public class User {
 		this.updateTimestamp = updateTimestamp;
 	}
 
-	public Long getUserId() {
-		return userId;
-	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Instant getCriationTimestamp() {
-		return criationTimestamp;
-	}
-
-	public void setCriationTimestamp(Instant criationTimestamp) {
-		this.criationTimestamp = criationTimestamp;
-	}
-
-	public Instant getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Instant updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public List<Account> getAccounts() {
-		return accounts;
-	}
-
-	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
-	}
-
+	
 	
 	
 }
