@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.jeffersonssousa.investHub.controller.dto.AccountDTO;
 import com.jeffersonssousa.investHub.controller.dto.AccountResponseDTO;
 import com.jeffersonssousa.investHub.controller.dto.UserRequestDTO;
+import com.jeffersonssousa.investHub.controller.dto.UserResponseDTO;
 import com.jeffersonssousa.investHub.entities.Account;
 import com.jeffersonssousa.investHub.entities.User;
 import com.jeffersonssousa.investHub.services.UserService;
@@ -37,10 +38,10 @@ public class UserController {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@GetMapping("/{userId}")
-	public ResponseEntity<UserRequestDTO> getUserById(@PathVariable Long userId){
-		UserRequestDTO userDTO = userService.getUserById(userId);
-		return ResponseEntity.ok().body(userDTO);
+	@GetMapping("/{id}")
+	public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
+		UserResponseDTO user = new UserResponseDTO(userService.getUserById(id));
+		return ResponseEntity.ok().body(user);
 	}
 	
 	@GetMapping

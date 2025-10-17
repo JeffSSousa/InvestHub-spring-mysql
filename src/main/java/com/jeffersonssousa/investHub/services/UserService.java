@@ -37,12 +37,11 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public UserRequestDTO getUserById(Long id) {
-		Optional<User> obj = userRepository.findById(id);
-		User user = obj.orElseThrow(() -> new ControllerNotFoundException(id));
-		UserRequestDTO userDTO = new UserRequestDTO(user.getUsername(), user.getEmail(), user.getPassword());
-	
-		return userDTO;
+	public User getUserById(Long id) {
+		User user = userRepository.findById(id)
+					.orElseThrow(() -> new ControllerNotFoundException(id));;
+
+		return user;
 	}
 
 	public List<UserRequestDTO> getUsers() {
