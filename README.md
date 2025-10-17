@@ -29,6 +29,7 @@ Além de oferecer um CRUD completo para ativos, o projeto integra a API pública
 - ✅ API Brapi – consumo de dados de ações e fundos em tempo real.
 - ✅ Maven – gerenciamento de dependências e build do projeto.
 - ✅ Postman – teste e documentação dos endpoints da API.
+- ✅ Lombok – Utilização do lombok para remover boilerplates.
 
 ## ✅ Exemplo de Requisição Realizada no Postman
 ![Dashboard do projeto](docs/images/Postman/Postman%20endpoints.png)
