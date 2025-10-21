@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.jeffersonssousa.investHub.controller.dto.StockDTO;
+import com.jeffersonssousa.investHub.controller.dto.StockRequestDTO;
 import com.jeffersonssousa.investHub.entities.Stock;
 import com.jeffersonssousa.investHub.services.StockService;
 
@@ -22,7 +22,7 @@ public class StockController {
 	private StockService stockService;
 
 	@PostMapping
-	public ResponseEntity<Void> createStock(@RequestBody  StockDTO dto){
+	public ResponseEntity<Void> createStock(@RequestBody  StockRequestDTO dto){
 		Stock stock = new Stock(dto);
 		
 		stockService.createStock(stock);
