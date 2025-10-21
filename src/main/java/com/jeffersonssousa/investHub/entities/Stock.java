@@ -1,5 +1,7 @@
 package com.jeffersonssousa.investHub.entities;
 
+import com.jeffersonssousa.investHub.controller.dto.StockDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -24,4 +26,10 @@ public class Stock {
 	@Column(name = "description")
 	private String description;
 
+	public Stock(StockDTO dto) {
+		this.stockId = dto.stockId();
+		this.description = dto.description();
+	}
+	
+	
 }

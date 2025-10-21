@@ -22,13 +22,13 @@ public class StockController {
 	private StockService stockService;
 
 	@PostMapping
-	public ResponseEntity<Stock> createStock(@RequestBody  StockDTO stockDTO){
-		Stock stock = stockService.fromDTO(stockDTO);
+	public ResponseEntity<Void> createStock(@RequestBody  StockDTO dto){
+		Stock stock = new Stock(dto);
 		
-		stock = stockService.createStock(stock);
+		stockService.createStock(stock);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(stock.getStockId()).toUri();
 		
-		return ResponseEntity.created(uri).body(stock);
+		return ResponseEntity.created(uri).build();
 	}
 	
 }
